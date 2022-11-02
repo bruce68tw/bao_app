@@ -25,7 +25,7 @@ class _StageBatchState extends State<StageBatch> {
   @override
   void initState() {
      _baoId = widget.id;
-     _dirImage = XpUt.dirStageImage(_baoId);
+     _dirImage = Xp.dirStageImage(_baoId);
 
     super.initState();
     Future.delayed(Duration.zero, ()=> rebuildAsync());
@@ -69,7 +69,7 @@ class _StageBatchState extends State<StageBatch> {
       }
     }
     */
-    await XpUt.downStageImage(context, _baoId, true, _dirImage);
+    await Xp.downStageImage(context, _baoId, true, _dirImage);
     _isOk = true;
     setState((){});
   }
@@ -145,7 +145,7 @@ class _StageBatchState extends State<StageBatch> {
     var data = {'id': _baoId, 'reply': reply};
     await HttpUt.getStrAsync(context, 'Stage/ReplyBatch', false, data, (result){
       if (result == '1'){
-        XpUt.setAttendStatus(_baoId, AttendEstr.finish);
+        Xp.setAttendStatus(_baoId, AttendEstr.finish);
         ToolUt.msg(context, '恭喜答對了!');
       } else {
         ToolUt.msg(context, '哦哦，你猜錯了!');
@@ -158,8 +158,8 @@ class _StageBatchState extends State<StageBatch> {
     if (!_isOk) return Container();
 
     return Scaffold(
-      appBar: WG.appBar('解謎: ' + widget.name),
-      body: XpUt.getStageBody(_dirImage, false, replyCtrl, onSubmitAsync),
+      appBar: WG2.appBar('解謎: ' + widget.name),
+      body: Xp.getStageBody(_dirImage, 0, replyCtrl, onSubmitAsync),
     );
   }
   

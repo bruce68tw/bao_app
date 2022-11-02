@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:base_lib/all.dart';
 import 'all.dart';
+import 'stage_step.dart';
 
 class MyBao extends StatefulWidget {
   const MyBao({Key? key}) : super(key: key);
@@ -17,33 +18,32 @@ class _MyBaoState extends State<MyBao> {
   @override
   void initState() {
     //set first, coz function parameter !!
-    _pagerSrv = PagerSrv(rebuildAsync);
+    _pagerSrv = PagerSrv(showAsync);
 
     //call before reload()
     super.initState();
-    Future.delayed(Duration.zero, ()=> rebuildAsync());
+    Future.delayed(Duration.zero, ()=> showAsync());
   }
 
   //reload page
-  Future rebuildAsync() async {
-    if (!await XpUt.isRegAsync(context)) return;
+  Future showAsync() async {
+    if (!await Xp.isRegAsync(context)) return;
 
     //get rows & check
     await HttpUt.getJsonAsync(context, 'MyBao/GetPage', true, _pagerSrv.getDtJson(), (json){
       if (json == null) return;
       
       _pagerDto = PagerDto<BaoRowDto>.fromJson(json, BaoRowDto.fromJson);
-      _isOk = true;
-      setState((){});
+      setState(()=> _isOk = true);
     });
   }
 
   ///get view body widget
   Widget getBody() {
     var rows = _pagerDto.data;
-    if (rows.isEmpty) return XpUt.emptyMsg();
+    if (rows.isEmpty) return Xp.emptyMsg();
 
-    var list = XpUt.baosToWidgets(rows, rowsToTrails(rows));
+    var list = Xp.baosToWidgets(rows, rowsToTrails(rows));
     list.add(_pagerSrv.getWidget(_pagerDto));
     return ListView(children: list);
   }
@@ -53,13 +53,18 @@ class _MyBaoState extends State<MyBao> {
     var widgets = <Widget>[];
     for (int i = 0; i < rows.length; i++) {
       var row = rows[i];
-      widgets.add(WG.textBtn('解題', ()=> onAns(row.isBatch, row.id, row.name)));
+      var status = Xp.getAttendStatus(row.id);
+      widgets.add(
+        (status == AttendEstr.finish) ? WG2.textBtn('已答對', ()=> ToolUt.openForm(context, StageStep(id: row.id, name: row.name, editable: false))) :
+        WG2.textBtn('解題', ()=> onAnswer(row.isBatch, row.id, row.name))
+      );
     }
     return widgets;
   }
 
-  void onAns(bool isBatch, String baoId, String baoName) {
-    XpUt.openStage(context, isBatch, baoId, baoName);
+  //onclick answer
+  void onAnswer(bool isBatch, String baoId, String baoName) {
+    Xp.openStage(context, isBatch, baoId, baoName);
   }
 
   @override
@@ -67,7 +72,7 @@ class _MyBaoState extends State<MyBao> {
     if (!_isOk) return Container();
 
     return Scaffold(
-      appBar: WG.appBar('我的尋寶'),
+      appBar: WG2.appBar('我的尋寶'),
       body: getBody(),
     );
   }

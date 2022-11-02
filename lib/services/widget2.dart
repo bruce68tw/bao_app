@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:base_lib/all.dart';
 
 /// static class(widget)
-class WG {
+class WG2 {
 
   static const pagePad = EdgeInsets.all(20);
 
@@ -12,7 +12,7 @@ class WG {
   static AppBar appBar(String title) {
     return AppBar(
       toolbarHeight: 42,
-      title: WidgetUt.text(15, title, Colors.white),
+      title: WG.text(15, title, Colors.white),
     );
   }
 
@@ -21,9 +21,9 @@ class WG {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        WidgetUt.text(14, label, Colors.grey),
-        WidgetUt.text(18, text, color),
-        WidgetUt.divider(),
+        WG.text(14, label, Colors.grey),
+        WG.text(18, text, color),
+        WG.divider(),
       ]
     );
   }
@@ -56,7 +56,7 @@ class WG {
       (color == null) ? Colors.blue :
       color;
     return TextButton(
-      child: WidgetUt.text(15, text, color2),
+      child: WG.text(15, text, color2),
       onPressed: status ? fnOnClick : null,
     ); 
   }
@@ -67,9 +67,9 @@ class WG {
     return Container(
         alignment: Alignment.center,
         margin: (top == null) 
-          ? WidgetUt.gap(15) : EdgeInsets.only(top:top, right:15, bottom:15, left:15),
+          ? WG.gap(15) : EdgeInsets.only(top:top, right:15, bottom:15, left:15),
         child: ElevatedButton(          
-          child: WidgetUt.text(16, text),
+          child: WG.text(16, text),
           onPressed: status ? fnOnClick : null,
         ));
   }

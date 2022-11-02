@@ -4,12 +4,13 @@ import 'package:base_lib/all.dart';
 import 'all.dart';
 
 class StageStep extends StatefulWidget {
-  const StageStep({Key? key, required this.id, required this.name})
+  const StageStep({Key? key, required this.id, required this.name, required this.editable})
       : super(key: key);
 
   //input parameter
-  final String id;    //Bao.Id
-  final String name;  //Bao.Name
+  final String id;      //Bao.Id
+  final String name;    //Bao.Name
+  final bool editable;  //editable or not
 
   @override
   _StageStepState createState() => _StageStepState();
@@ -19,18 +20,19 @@ class _StageStepState extends State<StageStep> {
   bool _isOk = false;   //status
   late String _baoId;
   late String _dirImage;
+  late int _stageIndex;   //stage image index, base 1, (-1:readOnly)
   final replyCtrl = TextEditingController();
 
   @override
   void initState() {
-     _baoId = widget.id;
-     _dirImage = XpUt.dirStageImage(_baoId);
+    _baoId = widget.id;
+    _dirImage = Xp.dirStageImage(_baoId);
 
     super.initState();
-    Future.delayed(Duration.zero, ()=> rebuildAsync());
+    Future.delayed(Duration.zero, ()=> showAsync());
   }
 
-  Future rebuildAsync() async {
+  Future<void> showAsync() async {
 
     /*
     //create folder if need
@@ -55,13 +57,14 @@ class _StageStepState extends State<StageStep> {
     }
     */
 
-    await XpUt.downStageImage(context, _baoId, false, _dirImage);
-    _isOk = true;
-    setState((){});
+    _stageIndex = widget.editable
+      ? await Xp.downStageImage(context, _baoId, false, _dirImage)
+      : -1;
+    setState(()=> _isOk = true);
   }
 
   //onclick submit
-  Future onSubmitAsync() async {
+  Future<void> onSubmitAsync() async {
     var reply = replyCtrl.text;
     if (StrUt.isEmpty(reply)) {
       ToolUt.msg(context, '不可空白。');
@@ -72,7 +75,7 @@ class _StageStepState extends State<StageStep> {
     var data = {'id': _baoId, 'reply': reply};
     await HttpUt.getStrAsync(context, 'Stage/ReplyStep', false, data, (result){
       if (result == '1'){
-        XpUt.setAttendStatus(_baoId, AttendEstr.finish);
+        Xp.setAttendStatus(_baoId, AttendEstr.finish);
         ToolUt.msg(context, '恭喜答對了!');
       } else {
         ToolUt.msg(context, '哦哦，你猜錯了!');
@@ -85,8 +88,8 @@ class _StageStepState extends State<StageStep> {
     if (!_isOk) return Container();
 
     return Scaffold(
-      appBar: WG.appBar('解謎: ' + widget.name),
-      body: XpUt.getStageBody(_dirImage, false, replyCtrl, onSubmitAsync),
+      appBar: WG2.appBar('解謎: ' + widget.name),
+      body: Xp.getStageBody(_dirImage, _stageIndex, replyCtrl, onSubmitAsync),
     );
   }
   

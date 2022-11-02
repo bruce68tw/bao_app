@@ -34,7 +34,7 @@ class _BaoState extends State<Bao> {
   /// rebuild page
   Future rebuildAsync() async {
     //4.檢查初始狀態, check initial status
-    if (!await XpUt.isRegAsync(context)) return;
+    if (!await Xp.isRegAsync(context)) return;
 
     //5.讀取資料庫, get rows & check
     await HttpUt.getJsonAsync(context, 'Bao/GetPage', true, _pagerSrv.getDtJson(), (json){
@@ -49,9 +49,9 @@ class _BaoState extends State<Bao> {
   //6.顯示畫面內容, get view body widget
   Widget getBody() {
     var rows = _pagerDto.data;
-    if (rows.isEmpty) return XpUt.emptyMsg();
+    if (rows.isEmpty) return Xp.emptyMsg();
 
-    var list = XpUt.baosToWidgets(rows, rowsToTrails(rows));
+    var list = Xp.baosToWidgets(rows, rowsToTrails(rows));
     list.add(_pagerSrv.getWidget(_pagerDto));
     return ListView(children: list);
   }
@@ -64,7 +64,7 @@ class _BaoState extends State<Bao> {
 
     //return page
     return Scaffold(
-      appBar: WG.appBar('尋寶'),
+      appBar: WG2.appBar('尋寶'),
       body: getBody(),
     );
   }
@@ -80,7 +80,7 @@ class _BaoState extends State<Bao> {
     if (isBatch){
       ToolUt.openForm(context, StageBatch(id: id, name: name));
     } else {
-      ToolUt.openForm(context, StageStep(id: id, name: name));
+      ToolUt.openForm(context, StageStep(id: id, name: name, editable: true));
     }
   }
 
@@ -90,12 +90,12 @@ class _BaoState extends State<Bao> {
     var widgets = <Widget>[];
     for (int i = 0; i < rows.length; i++) {
       var row = rows[i];
-      var status = XpUt.getAttendStatus(row.id);
+      var status = Xp.getAttendStatus(row.id);
       widgets.add(
-        (status == null) ? WG.textBtn('看明細', ()=> onDetail(row.id)) :
-        (status == AttendEstr.run) ? WG.textBtn('已參加', ()=> onStage(row.isBatch, row.id, row.name), Colors.green) : 
-        (status == AttendEstr.finish) ? WG.textBtn('已答對', ()=> onDetail(row.id)) : 
-        WG.textBtn('已取消', ()=> onStage(row.isBatch, row.id, row.name), Colors.red)
+        (status == null) ? WG2.textBtn('看明細', ()=> onDetail(row.id)) :
+        (status == AttendEstr.run) ? WG2.textBtn('已參加', ()=> onStage(row.isBatch, row.id, row.name), Colors.green) : 
+        (status == AttendEstr.finish) ? WG2.textBtn('已答對', ()=> onDetail(row.id)) : 
+        WG2.textBtn('已取消', ()=> onStage(row.isBatch, row.id, row.name), Colors.red)
       );
     }
 

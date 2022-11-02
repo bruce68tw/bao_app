@@ -61,24 +61,24 @@ class _BaoDetailState extends State<BaoDetail> {
         DateUt.format2(json['EndTime']);
 
     return Scaffold(
-      appBar: WG.appBar('尋寶明細'),
+      appBar: WG2.appBar('尋寶明細'),
       body: SingleChildScrollView(
-        padding: WG.pagePad,
+        padding: WG2.pagePad,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            WG.labelText('尋寶名稱', json['Name']),
-            WG.labelText('起迄時間', startEnd),
-            WG.labelText('發行單位', json['Corp']),
-            WG.labelText('是否需要移動', isMove ? '是' : '否', isMove ? Colors.red : null),
-            WG.labelText('關卡數目', json['StageCount'].toString()),
-            WG.labelText(
+            WG2.labelText('尋寶名稱', json['Name']),
+            WG2.labelText('起迄時間', startEnd),
+            WG2.labelText('發行單位', json['Corp']),
+            WG2.labelText('是否需要移動', isMove ? '是' : '否', isMove ? Colors.red : null),
+            WG2.labelText('關卡數目', json['StageCount'].toString()),
+            WG2.labelText(
                 '過關方式', json['IsBatch'] == 1 ? '批次傳送全部解答' : '循序過關'),
-            WG.labelText('獎品', json['GiftName']),
-            WG.labelText('遊戲說明', json['Note']),
+            WG2.labelText('獎品', json['GiftName']),
+            WG2.labelText('遊戲說明', json['Note']),
             //WG.getShowCol('目前參加人數', row['JoinCount'].toString()),
-            WG.tailBtn('我要參加', 
-              (XpUt.getAttendStatus(widget.id) == null) ? ()=> onAttendAsync(widget.id) : null),
+            WG2.tailBtn('我要參加', 
+              (Xp.getAttendStatus(widget.id) == null) ? ()=> onAttendAsync(widget.id) : null),
           ],
         ),
       ),

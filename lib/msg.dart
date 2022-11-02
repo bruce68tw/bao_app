@@ -27,7 +27,7 @@ class _MsgState extends State<Msg> {
 
   /// reload page
   Future rebuildAsync() async {
-    if (!await XpUt.isRegAsync(context)) return;
+    if (!await Xp.isRegAsync(context)) return;
 
     //get rows, check & set total rows
     await HttpUt.getJsonAsync(context, 'Cms/GetPage', true, _pagerSrv.getDtJson(), (json){
@@ -42,7 +42,7 @@ class _MsgState extends State<Msg> {
   ///get view body widget
   Widget getBody() {
     var rows = _pagerDto.data;
-    if (rows.isEmpty) return XpUt.emptyMsg();
+    if (rows.isEmpty) return Xp.emptyMsg();
 
     //#region get rows
     var list = <Widget>[];
@@ -55,10 +55,10 @@ class _MsgState extends State<Msg> {
         */
         title: Text(row.title),
         subtitle: Text(DateUt.format2(row.startTime) + ' 開始'),
-        trailing: WG.textBtn('看明細', ()=> onDetail(row.id)),
+        trailing: WG2.textBtn('看明細', ()=> onDetail(row.id)),
       ));
 
-      list.add(WidgetUt.divider());
+      list.add(WG.divider());
     }
     //#endregion
 
@@ -78,7 +78,7 @@ class _MsgState extends State<Msg> {
     if (!_isOk) return Container();
 
     return Scaffold(
-      appBar: WG.appBar('最新消息'),
+      appBar: WG2.appBar('最新消息'),
       body: getBody(),
     );
   }

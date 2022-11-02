@@ -32,7 +32,7 @@ class _UserEditState extends State<UserEdit> {
 
   Future rebuildAsync() async {
     //get info file
-    var file = XpUt.getInfoFile();
+    var file = Xp.getInfoFile();
     _isNew = !await file.exists();
     var run = true;
     if (_isNew) {
@@ -125,9 +125,9 @@ class _UserEditState extends State<UserEdit> {
     }
 
     //return encode userId
-    var data = XpUt.encode(authCode + ',' + emailCtrl.text);
+    var data = Xp.encode(authCode + ',' + emailCtrl.text);
     await HttpUt.getStrAsync(context, 'User/Auth', false, {'data': data}, (key){
-      XpUt.setInfo(key);
+      Xp.setInfo(key);
       ToolUt.msg(context, '認証作業完成。');
     });
   }
@@ -140,9 +140,9 @@ class _UserEditState extends State<UserEdit> {
     var status = _isNew;  //edit status
     var isRead = !_isNew;
     return Scaffold(
-      appBar: WG.appBar('維護基本資料'),
+      appBar: WG2.appBar('維護基本資料'),
       body: SingleChildScrollView(
-        padding: WG.pagePad,
+        padding: WG2.pagePad,
         child: Column(
           children: <Widget>[
             Form(
@@ -152,8 +152,8 @@ class _UserEditState extends State<UserEdit> {
                   TextFormField(
                     readOnly: isRead,
                     controller: phoneCtrl,
-                    style: WG.inputStyle(status),
-                    decoration: WG.inputLabel('手機號碼 (不含國碼, 確定後無法修改)'),
+                    style: WG2.inputStyle(status),
+                    decoration: WG2.inputLabel('手機號碼 (不含國碼, 確定後無法修改)'),
                     autofocus: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) return '手機號碼不可空白。';
@@ -166,8 +166,8 @@ class _UserEditState extends State<UserEdit> {
                   ),
                   TextFormField(
                     controller: nameCtrl,
-                    style: WG.inputStyle(),
-                    decoration: WG.inputLabel('顯示名稱'),
+                    style: WG2.inputStyle(),
+                    decoration: WG2.inputLabel('顯示名稱'),
                     validator: (value) {
                       if (value == null || value.isEmpty) return '顯示名稱不可空白。';
 
@@ -178,8 +178,8 @@ class _UserEditState extends State<UserEdit> {
                   TextFormField(
                     readOnly: isRead,
                     controller: emailCtrl,
-                    style: WG.inputStyle(status),
-                    decoration: WG.inputLabel('Email (須認證, 確定後無法修改)'),
+                    style: WG2.inputStyle(status),
+                    decoration: WG2.inputLabel('Email (須認證, 確定後無法修改)'),
                     validator: (value) {
                       if (value == null || value.isEmpty) return 'Email不可空白。';
 
@@ -190,8 +190,8 @@ class _UserEditState extends State<UserEdit> {
                   TextFormField(
                     controller: addressCtrl,
                     //initialValue: 'Taipei',
-                    style: WG.inputStyle(),
-                    decoration: WG.inputLabel('地址 (用於寄送獎品)'),
+                    style: WG2.inputStyle(),
+                    decoration: WG2.inputLabel('地址 (用於寄送獎品)'),
                     validator: (value) {
                       if (value == null || value.isEmpty) return '地址不可空白。';
 
@@ -200,17 +200,17 @@ class _UserEditState extends State<UserEdit> {
                     },
                   ),
 
-                  !_isNew ? WG.tailBtn('修改資料', ()=> onUpdateAsync()) :
-                  !_showAuth ? WG.tailBtn('建立帳號', ()=> onCreateAsync()) :
+                  !_isNew ? WG2.tailBtn('修改資料', ()=> onUpdateAsync()) :
+                  !_showAuth ? WG2.tailBtn('建立帳號', ()=> onCreateAsync()) :
                   Column(
                     children: <Widget>[
                       //WG.tailBtn('建立帳戶'),
                       TextFormField(
                         controller: authCtrl,
-                        style: WG.inputStyle(),
-                        decoration: WG.inputLabel('請輸入Email信件裡面的認証碼'),
+                        style: WG2.inputStyle(),
+                        decoration: WG2.inputLabel('請輸入Email信件裡面的認証碼'),
                       ),
-                      WG.tailBtn('執行認証', ()=> onAuthAsync()),
+                      WG2.tailBtn('執行認証', ()=> onAuthAsync()),
                   ]),
                 ],
               ),

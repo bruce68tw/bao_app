@@ -29,23 +29,23 @@ class MyData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WG.appBar('我的資料'),
+      appBar: WG2.appBar('我的資料'),
       body: ListView(
         children: <Widget>[
           ListTile(
             leading: preIcon(Icons.redeem),
             title: Align(
               alignment: Alignment.centerLeft,
-              child: WG.textBtn('我的尋寶', ()=> onMyBao(context)),
+              child: WG2.textBtn('我的尋寶', ()=> onMyBao(context)),
           )),
-          WidgetUt.divider(),
+          WG.divider(),
           ListTile(
             leading: preIcon(Icons.edit),
             title: Align(
               alignment: Alignment.centerLeft,
-              child: WG.textBtn('維護基本資料', ()=> onEdit(context)),
+              child: WG2.textBtn('維護基本資料', ()=> onEdit(context)),
           )),
-          WidgetUt.divider(),
+          WG.divider(),
         ],
       ),
     );

@@ -9,7 +9,7 @@
             "type": "dart",
             "request": "launch",
             "flutterMode": "debug",
-            "program": "lib/main.dart",
+            //"program": "lib/main.dart",
             "deviceId": "RQ3005CKWW"
         },
         {
@@ -39,7 +39,7 @@
             "type": "dart",
             "request": "launch",
             "flutterMode": "debug",
-            "program": "lib/main.dart",
+            //"program": "lib/main.dart",
             "deviceId": "RQ3005CKWW"
         },
         {

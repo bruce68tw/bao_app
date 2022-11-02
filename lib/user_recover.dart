@@ -50,9 +50,9 @@ class _UserRecoverState extends State<UserRecover> {
     }
 
     //return encode userId
-    var data = XpUt.encode(authCode + ',' + widget.email);
+    var data = Xp.encode(authCode + ',' + widget.email);
     await HttpUt.getStrAsync(context, 'User/Auth', false, {'data': data}, (key){
-      XpUt.setInfo(key);
+      Xp.setInfo(key);
       ToolUt.msg(context, '回復帳號作業已經完成。');
     });
   }
@@ -62,26 +62,26 @@ class _UserRecoverState extends State<UserRecover> {
     //if (!_isOk) return Container();
 
     return Scaffold(
-      appBar: WG.appBar('回復用戶帳號'),
+      appBar: WG2.appBar('回復用戶帳號'),
       body: SingleChildScrollView(
-        padding: WG.pagePad,
+        padding: WG2.pagePad,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            WG.labelText('Email', widget.email),
-            WidgetUt.text(16, '要回復這個Email所對應的用戶帳號, ' 
+            WG2.labelText('Email', widget.email),
+            WG.text(16, '要回復這個Email所對應的用戶帳號, ' 
 '請點擊下方的 [寄送認証郵件] 按鈕, 系統將會寄送認証Email到上面的信箱。'),
-            WidgetUt.divider(),
+            WG.divider(),
 
-            (_step == 1) ? WG.tailBtn('寄送認証郵件', ()=> onEmailAsync()) : 
+            (_step == 1) ? WG2.tailBtn('寄送認証郵件', ()=> onEmailAsync()) : 
             Column(
               children: <Widget>[
                 TextFormField(
                   controller: authCtrl,
-                  style: WG.inputStyle(),
-                  decoration: WG.inputLabel('請輸入Email信件裡面的認証碼'),
+                  style: WG2.inputStyle(),
+                  decoration: WG2.inputLabel('請輸入Email信件裡面的認証碼'),
                 ),
-                WG.tailBtn('回復用戶帳號', ()=> onRecoverAsync()),
+                WG2.tailBtn('回復用戶帳號', ()=> onRecoverAsync()),
             ]),
           ],
         ),

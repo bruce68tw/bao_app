@@ -40,9 +40,9 @@ class _MsgDetailState extends State<MsgDetail> {
           //3.get image file
           _bodyWidget = await HttpUt.getImageAsync(context, 'Cms/ViewFile', 
             { 'id':widget.id, 'ext':FileUt.jsonToImageExt(json)});
-          _bodyWidget ??= XpUt.emptyMsg();
+          _bodyWidget ??= Xp.emptyMsg();
         } else {
-          _bodyWidget = WG.labelText('訊息內容', json['Text']);
+          _bodyWidget = WG2.labelText('訊息內容', json['Text']);
         }
 
         setState((){});
@@ -76,13 +76,13 @@ class _MsgDetailState extends State<MsgDetail> {
 
     var json = _json!;
     return Scaffold(
-      appBar: WG.appBar('最新消息明細'),
+      appBar: WG2.appBar('最新消息明細'),
       body: SingleChildScrollView(
-        padding: WG.pagePad,
+        padding: WG2.pagePad,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            WG.labelText('標題', json['Title']),
+            WG2.labelText('標題', json['Title']),
             _bodyWidget!
           ],
         ),
