@@ -38,7 +38,7 @@ class Xp {
   static final Map<String, String> _attend = {};
   //=== auto set end ===
 
-  static Future initFunAsync([bool testMode=false]) async {
+  static Future initFunAsync([bool testMode = false]) async {
     if (!_isInit) {
       await FunUt.init(isHttps, apiServer, testMode);
       _aesKey16 = StrUt.preZero(16, aesKey, true);
@@ -68,7 +68,7 @@ class Xp {
     return StrUt.aesDecode(data, _aesKey);
   }
   */
-  
+
   /// system initial & login
   /// @context current context
   /// @return initial status
@@ -86,7 +86,8 @@ class Xp {
       return false;
     }
 
-    await HttpUt.getJsonAsync(context, 'Home/Login', false, {'info': _encodeId}, (json){
+    await HttpUt.getJsonAsync(context, 'Home/Login', false, {'info': _encodeId},
+        (json) {
       if (json == null) return false;
 
       var token = json['token'];
@@ -111,9 +112,7 @@ class Xp {
 
   ///get attend status
   static String? getAttendStatus(String baoId) {
-    return _attend.containsKey(baoId)
-      ? _attend[baoId]
-      : null;
+    return _attend.containsKey(baoId) ? _attend[baoId] : null;
   }
 
   ///attend bao
@@ -122,11 +121,13 @@ class Xp {
   }
 
   ///open stage form
-  static openStage(BuildContext context, bool isBatch, String baoId, String baoName) {
-    if (isBatch){
+  static openStage(
+      BuildContext context, bool isBatch, String baoId, String baoName) {
+    if (isBatch) {
       ToolUt.openForm(context, StageBatch(id: baoId, name: baoName));
     } else {
-      ToolUt.openForm(context, StageStep(id: baoId, name: baoName, editable: true));
+      ToolUt.openForm(
+          context, StageStep(id: baoId, name: baoName, editable: true));
     }
   }
 
@@ -151,8 +152,10 @@ class Xp {
   }
 
   ///return empty message
-  static Widget emptyMsg(){
-    return const Center(child: Text('目前無任何資料。', 
+  static Widget emptyMsg() {
+    return const Center(
+        child: Text(
+      '目前無任何資料。',
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 18,
@@ -165,9 +168,7 @@ class Xp {
   /// @rows source rows
   /// @trails tail widget list
   /// @return list widget
-  static List<Widget> baosToWidgets(
-      List<BaoRowDto> rows, List<Widget> trails) {
-
+  static List<Widget> baosToWidgets(List<BaoRowDto> rows, List<Widget> trails) {
     var widgets = <Widget>[];
     if (rows.isEmpty) return widgets;
 
@@ -204,28 +205,27 @@ class Xp {
 
   /// download stage image
   /// return file index(base 1) if not batch
-  static Future<int> downStageImage(BuildContext context, String baoId, 
-      bool isBatch, String dirImage) async {
-
+  static Future<int> downStageImage(
+      BuildContext context, String baoId, bool isBatch, String dirImage) async {
     //create folder if need
     var dir = Directory(dirImage);
     //TODO: temp add for remove cached image files
     //dir.deleteSync(recursive: true);
 
-    if (isBatch){
+    if (isBatch) {
       if (dir.existsSync() && dir.listSync().isNotEmpty) return 0;
     }
 
     //download it
     var action = isBatch ? 'Stage/GetBatchImage' : 'Stage/GetStepImage';
-    return await HttpUt.saveUnzipAsync(context, action, {'id': baoId}, dirImage);
+    return await HttpUt.saveUnzipAsync(
+        context, action, {'id': baoId}, dirImage);
   }
 
   //get body widget for stageStep/stageBatch
   //param stageIndex: 0(batch),n(step),-1(step read only)
-  static Widget getStageBody(String dirBao, int stageIndex, 
-    TextEditingController ctrl, Function fnOnSubmit) {
-
+  static Widget getStageBody(String dirBao, int stageIndex,
+      TextEditingController ctrl, Function fnOnSubmit) {
     //set widgets & return
     //var isBatch = (stageIndex == 0);
     var isStep = (stageIndex > 0);
@@ -236,7 +236,7 @@ class Xp {
 
     //sorting
     files.sort((a, b) => a.path.compareTo(b.path));
-    
+
     var widgets = <Widget>[];
     for (var file in files) {
       var cols = path.basename(file.path).split('_');
@@ -245,31 +245,31 @@ class Xp {
 
       //var no = int.parse(cols[0]);
       var text = '第' + cols[0] + '關';
-      if (cols.length > 3){
+      if (cols.length > 3) {
         text += ', 提示：' + cols[2];
       }
 
       //widgets.add(ListTile(title: Text('(' + StrUt.addNum(no, 1) + ')')));
       //add text
       widgets.add(Padding(
-        padding: const EdgeInsets.only(top:10, bottom:10, left: 5),
+        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
         child: WG.text(16, text),
-      )); 
+      ));
       //add image
       widgets.add(InteractiveViewer(
         panEnabled: true,
         boundaryMargin: WG.gap(0),
         minScale: 1,
-        maxScale: 8, 
+        maxScale: 8,
         child: Image.file(file as File),
       ));
       widgets.add(const Divider());
-    }    
+    }
 
-    if (!readOnly){
+    if (!readOnly) {
       String label;
       int lines;
-      if (isStep){
+      if (isStep) {
         label = '(請輸入這個關卡的答案，不含標點符號)';
         lines = 1;
       } else {
@@ -297,7 +297,7 @@ class Xp {
         margin: const EdgeInsets.all(20),
         child: ElevatedButton(
           child: const Text('送出解答', style: TextStyle(fontSize: 15)),
-          onPressed: ()=> fnOnSubmit(),
+          onPressed: () => fnOnSubmit(),
         ),
       ));
     }
@@ -307,5 +307,4 @@ class Xp {
       children: widgets,
     );
   }
-
 } //class
